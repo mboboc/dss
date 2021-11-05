@@ -2,11 +2,11 @@
   <div class="todo-box">
       <span v-if="editable">
         <input v-model="description">
-        <button v-on:click="viewMode">Save</button>
+        <button v-on:click="viewMode(); editItem(id, description)">Save</button>
       </span>
       <span v-else>
         <p>{{ description }}</p>
-        <button> Delete </button>
+        <button v-on:click="deleteItem(id)"> Delete </button>
         <button v-on:click="editMode">Edit</button>
       </span>
   </div>
@@ -16,7 +16,8 @@
 export default {
   name: 'TodoItem',
   props: {
-    description: String
+    description: String,
+    id: Number
   },
   data () {
     const editable = true;
@@ -31,11 +32,11 @@ export default {
     viewMode: function() {
         this.editable = false
     },
-    deleteItem: function() {
-        this.$emit('delete-item')
+    deleteItem: function(id) {
+        this.$emit('delete', id)
     },
-    saveItem: function() {
-        this.$emit('edit-item')
+    editItem: function(id, description) {
+        this.$emit('edit', id, description)
     }
   }
 }

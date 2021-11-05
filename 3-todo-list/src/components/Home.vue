@@ -4,8 +4,9 @@
       <li v-for="item in todoList" :key="item.id">
         <TodoItem
             :description="item.description"
-            v-on:delete-item="deleteItem"
-            v-on:edit-item="editItem"
+            :id="item.id"
+            v-on:delete="deleteItem"
+            v-on:edit="editItem"
         />
         <br>
       </li>
@@ -39,11 +40,11 @@ export default {
     addToList: function () {
         this.todoList.push({ id: this.todoList.length, description: this.newitem })
     },
-    deleteItem: function () {
-        console.log("Delete")
+    deleteItem: function (id) {
+        console.log("Delete " + id)
     },
-    editItem: function () {
-        console.log("Edit")
+    editItem: function (id, description) {
+        console.log("Edit " + id + " " + "<" + description + ">")
     }
   }
 };
