@@ -1,45 +1,52 @@
 <template>
   <div class="todo-box">
-      <span v-if="editable">
-        <input v-model="description">
-        <button v-on:click="viewMode(); editItem(id, description)">Save</button>
-      </span>
-      <span v-else>
-        <p>{{ description }}</p>
-        <button v-on:click="deleteItem(id)"> Delete </button>
-        <button v-on:click="editMode">Edit</button>
-      </span>
+    <span v-if="editable">
+      <input v-model="description" />
+      <button
+        v-on:click="
+          viewMode();
+          editItem(id, description);
+        "
+      >
+        Save
+      </button>
+    </span>
+    <span v-else>
+      <p>{{ description }}</p>
+      <button v-on:click="deleteItem(id)">Delete</button>
+      <button v-on:click="editMode">Edit</button>
+    </span>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'TodoItem',
+  name: "TodoItem",
   props: {
     description: String,
-    id: Number
+    id: Number,
   },
-  data () {
-    const editable = true;
+  data() {
+    const editable = false;
     return {
-        editable,
-    }
+      editable,
+    };
   },
   methods: {
     editMode: function () {
-        this.editable = true
+      this.editable = true;
     },
-    viewMode: function() {
-        this.editable = false
+    viewMode: function () {
+      this.editable = false;
     },
-    deleteItem: function(id) {
-        this.$emit('delete', id)
+    deleteItem: function (id) {
+      this.$emit("delete", id);
     },
-    editItem: function(id, description) {
-        this.$emit('edit', id, description)
-    }
-  }
-}
+    editItem: function (id, description) {
+      this.$emit("edit", id, description);
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

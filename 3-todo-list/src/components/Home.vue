@@ -1,17 +1,21 @@
+<!-- XXX
+  The table is not reactive and the page needs to be refreshed for the changes to take action
+  This is most likely because localStorage is not reactive
+ -->
+
 <template>
   <div>
     <ul>
-      <li v-for="item in todoList" :key="item.id">
+      <li v-for="item in todoList" :key="Object.keys(item)">
         <TodoItem
-            :description="item.description"
-            :id="item.id"
-            v-on:delete="deleteItem"
-            v-on:edit="editItem"
+          :description="Object.values(item)[0]"
+          :id="Object.keys(item)[0]"
+          v-on:delete="deleteItem"
+          v-on:edit="editItem"
         />
-        <br>
       </li>
       <h5>Add new todo item</h5>
-      <input v-model="newitem" placeholder="Add description">
+      <input v-model="newitem" placeholder="Add description" />
       <button v-on:click="addToList">Save</button>
     </ul>
   </div>
@@ -25,28 +29,41 @@ export default {
     TodoItem,
   },
   data() {
-    const todoList = [
-      { id: 0, description: "Get A" },
-      { id: 1, description: "Get B" },
-      { id: 2, description: "Get C" },
-    ];
     const newitem = "";
     return {
-        todoList,
-        newitem,
-    }
+      newitem,
+    };
+  },
+  computed: {
+    todoList() {
+      var values = [],
+        keys = Object.keys(localStorage),
+        i = keys.length;
+
+      while (i--) {
+        if (localStorage.getItem(keys[i]) != "SILENT") {
+          var key = keys[i];
+          values.push({ [key]: localStorage.getItem(key) });
+        }
+      }
+
+      console.log(values);
+      return values;
+    },
   },
   methods: {
     addToList: function () {
-        this.todoList.push({ id: this.todoList.length, description: this.newitem })
+      window.localStorage.setItem(Date.now(), this.newitem);
     },
     deleteItem: function (id) {
-        console.log("Delete " + id)
+      console.log("Delete " + id);
+      window.localStorage.removeItem(id);
     },
     editItem: function (id, description) {
-        console.log("Edit " + id + " " + "<" + description + ">")
-    }
-  }
+      console.log("Edit " + id + " " + "<" + description + ">");
+      window.localStorage.setItem(id, description);
+    },
+  },
 };
 </script>
 
